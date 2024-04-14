@@ -1,5 +1,19 @@
 import mongoose from 'mongoose';
-const UserSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+// const AuthenticationSchema = new Schema({
+//   password: { String, required: true, select: false },
+//   salt: {
+//     type: String,
+//     required: true,
+//     select: false,
+//   },
+//   sessionToken: {
+//     type: String,
+//     required: true,
+//     select: false,
+//   },
+// });
+const UserSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -9,16 +23,18 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     authentication: {
-        password: { String, required: true, select: false },
-        salt: {
-            type: String,
-            required: true,
-            select: false,
-        },
-        sessionToken: {
-            type: String,
-            required: true,
-            select: false,
+        type: {
+            password: { String, required: true, select: false },
+            salt: {
+                type: String,
+                required: true,
+                select: false,
+            },
+            sessionToken: {
+                type: String,
+                required: true,
+                select: false,
+            },
         },
     },
 });
