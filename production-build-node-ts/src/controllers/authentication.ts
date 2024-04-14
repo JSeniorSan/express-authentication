@@ -2,6 +2,45 @@ import express from 'express';
 import { createUser, getUserByEmail } from '../db/users.js';
 import { authentication, random } from '../helpers/index.js';
 
+export const login = async (req: express.Request, res: express.Response) => {
+  const { email, password } = req.body;
+  try {
+    if (!email || !password) {
+      return res.sendStatus(400);
+    }
+
+    const currentUser = await getUserByEmail(email).select('+authentication.salt +authentication.password');
+
+    if (!currentUser) {
+      return res.sendStatus(400);
+    }
+
+    const expectedHash = authentication(currentUser.authentication[0].salt, password);
+
+    if (expectedHash !== currentUser.authentication[0].password) {
+      return res.sendStatus(403);
+    }
+
+    const salt = random();
+
+    currentUser.authentication[0].sessionToken = authentication(salt, currentUser._id.toString());
+
+    await currentUser.save();
+
+    res.cookie('TEKAI-AUTH', currentUser.authentication[0].sessionToken, {
+      domain: 'localhost',
+      path: '/',
+    });
+
+    return res.status(200).json(currentUser).end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+
+  return;
+};
+
 export const register = async (req: express.Request, res: express.Response) => {
   try {
     const { email, password, username } = req.body;
