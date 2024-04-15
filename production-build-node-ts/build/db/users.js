@@ -1,18 +1,18 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
-// const AuthenticationSchema = new Schema({
-//   password: { String, required: true, select: false },
-//   salt: {
-//     type: String,
-//     required: true,
-//     select: false,
-//   },
-//   sessionToken: {
-//     type: String,
-//     required: true,
-//     select: false,
-//   },
-// });
+const AuthenticationSchema = new Schema({
+    password: { type: String, required: true, select: false },
+    salt: {
+        type: String,
+        required: true,
+        select: false,
+    },
+    sessionToken: {
+        type: String,
+        required: false,
+        select: false,
+    },
+});
 const UserSchema = new Schema({
     username: {
         type: String,
@@ -22,21 +22,7 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
-    authentication: {
-        type: {
-            password: { String, required: true, select: false },
-            salt: {
-                type: String,
-                required: true,
-                select: false,
-            },
-            sessionToken: {
-                type: String,
-                required: true,
-                select: false,
-            },
-        },
-    },
+    authentication: [AuthenticationSchema],
 });
 export const UserModel = mongoose.model('User', UserSchema);
 export const getUsers = () => UserModel.find();

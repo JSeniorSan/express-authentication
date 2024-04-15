@@ -10,7 +10,7 @@ const AuthenticationSchema = new Schema({
   },
   sessionToken: {
     type: String,
-    required: true,
+    required: false,
     select: false,
   },
 });
