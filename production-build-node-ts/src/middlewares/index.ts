@@ -29,7 +29,6 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
     if (!sessionToken) {
       return res.sendStatus(403);
     }
-    console.log(req);
 
     const existingUser = await getUserBySessionToken(sessionToken);
 
