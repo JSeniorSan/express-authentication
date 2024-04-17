@@ -1,8 +1,11 @@
 import express from 'express';
 import { createUser, getUserByEmail } from '../db/users.js';
 import { authentication, random } from '../helpers/index.js';
+import { validationResult } from 'express-validator';
 
 export const login = async (req: express.Request, res: express.Response) => {
+  const result = validationResult(req);
+  console.log(result);
   const { email, password } = req.body;
   try {
     if (!email || !password) {
@@ -40,6 +43,8 @@ export const login = async (req: express.Request, res: express.Response) => {
 };
 
 export const register = async (req: express.Request, res: express.Response) => {
+  const result = validationResult(req);
+  console.log(result);
   try {
     const { email, password, username } = req.body;
 
